@@ -39,12 +39,10 @@ use Illuminate\Support\Facades\Storage;
                 @php
                     $strukturUrl = isset($sections['struktur']) && $sections['struktur']->image_url
                         ? $sections['struktur']->image_url
-                        : null;
+                        : (isset($profilData['struktur_organisasi']['gambar']) ? Storage::url($profilData['struktur_organisasi']['gambar']) : null);
                 @endphp
                 @if($strukturUrl)
-                    <img src="{{ $strukturUrl }}" alt="Struktur Organisasi" class="w-full rounded shadow" onerror="this.src='{{ asset('images/default-school-profile.png') }}'" />
-                @else
-                    <img src="{{ asset('images/default-school-profile.png') }}" alt="Struktur Organisasi" class="w-full rounded shadow" />
+                    <img src="{{ $strukturUrl }}" alt="Struktur Organisasi" class="w-full rounded shadow" />
                 @endif
             </div>
         </div>
