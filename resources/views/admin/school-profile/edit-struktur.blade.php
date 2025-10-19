@@ -64,7 +64,7 @@
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium text-gray-700 mb-2">Current Image</label>
                             <div class="flex items-center space-x-4">
-                                <img src="{{ asset($strukturSection->image) }}" alt="{{ $strukturSection->image_alt }}" class="h-32 w-48 object-cover rounded-lg">
+                                <img src="{{ $strukturSection->image_url }}" onerror="this.src='{{ asset('images/default-struktur.png') }}'" alt="{{ $strukturSection->image_alt ?? 'Struktur Organisasi' }}" class="h-32 w-48 object-cover rounded-lg">
                                 <div>
                                     <p class="text-sm text-gray-600">{{ basename($strukturSection->image) }}</p>
                                     <p class="text-xs text-gray-500">Upload new image to replace</p>

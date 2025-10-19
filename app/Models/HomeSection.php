@@ -29,12 +29,33 @@ class HomeSection extends Model
         'is_active' => 'boolean',
     ];
 
-    // Accessor for image URL
+    // Accessor for image URL (robust across storage/public paths)
     public function getImageUrlAttribute()
     {
-        if ($this->image) {
-            return asset('storage/' . str_replace('public/', '', $this->image));
+        $img = $this->image;
+        if (!$img) {
+            return null;
         }
-        return null;
+
+        // Full external URL
+        if (filter_var($img, FILTER_VALIDATE_URL)) {
+            return $img;
+        }
+
+        // Normalize leading slash
+        $img = ltrim($img, '/');
+
+        // Already points to public storage (no duplicate "storage/")
+        if (str_starts_with($img, 'storage/')) {
+            return asset($img);
+        }
+
+        // Stored via disk('public') => convert "public/" to web-accessible "storage/"
+        if (str_starts_with($img, 'public/')) {
+            return asset('storage/' . substr($img, 7));
+        }
+
+        // Relative path (e.g., "home-sections/hero.jpg")
+        return asset('storage/' . $img);
     }
 }

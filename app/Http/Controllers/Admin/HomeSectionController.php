@@ -53,30 +53,37 @@ class HomeSectionController extends Controller
 
         $data = $request->all();
 
-        // Handle image upload - only for hero section
-        if ($request->hasFile('image') && $data['section_key'] === 'hero') {
+        // Handle image upload for ANY section (not only hero)
+        if ($request->hasFile('image')) {
             $image = $request->file('image');
-            
-            // Validate file
+
             if (!$image->isValid()) {
                 return redirect()->back()->withErrors(['image' => 'Invalid file upload.']);
             }
-            
+
             // Generate safe filename
             $originalName = $image->getClientOriginalName();
             $extension = $image->getClientOriginalExtension();
             $safeName = preg_replace('/[^a-zA-Z0-9._-]/', '_', pathinfo($originalName, PATHINFO_FILENAME));
             $imageName = time() . '_' . $safeName . '.' . $extension;
-            
+
             try {
                 // Store in storage using Laravel Storage facade
                 $path = $image->storeAs('home-sections', $imageName, 'public');
                 $data['image'] = $path;
+
+                // Copy file to public storage for immediate access (for hosting without symlink)
+                $sourcePath = storage_path('app/public/' . $path);
+                $destPath = public_path('storage/' . $path);
+                $destDir = dirname($destPath);
+                if (!is_dir($destDir)) {
+                    mkdir($destDir, 0755, true);
+                }
+                @copy($sourcePath, $destPath);
             } catch (\Exception $e) {
                 return redirect()->back()->withErrors(['image' => 'Failed to upload image: ' . $e->getMessage()]);
             }
         } else {
-            // Remove image field for non-hero sections
             unset($data['image']);
         }
 
@@ -129,51 +136,42 @@ class HomeSectionController extends Controller
 
         $data = $request->all();
 
-        // Handle image upload - only for hero section
-        if ($request->hasFile('image') && $data['section_key'] === 'hero') {
+        // Handle image upload for ANY section
+        if ($request->hasFile('image')) {
             $image = $request->file('image');
-            
-            // Validate file
+
             if (!$image->isValid()) {
                 return redirect()->back()->withErrors(['image' => 'Invalid file upload.']);
             }
-            
-            // Delete old image if exists
+
+            // Delete old image if exists on public disk
             if ($homeSection->image && Storage::disk('public')->exists($homeSection->image)) {
                 Storage::disk('public')->delete($homeSection->image);
             }
-            
+
             // Generate safe filename
             $originalName = $image->getClientOriginalName();
             $extension = $image->getClientOriginalExtension();
             $safeName = preg_replace('/[^a-zA-Z0-9._-]/', '_', pathinfo($originalName, PATHINFO_FILENAME));
             $imageName = time() . '_' . $safeName . '.' . $extension;
-            
+
             try {
                 // Store in storage using Laravel Storage facade
                 $path = $image->storeAs('home-sections', $imageName, 'public');
                 $data['image'] = $path;
-                
+
                 // Copy file to public storage for immediate access
                 $sourcePath = storage_path('app/public/' . $path);
                 $destPath = public_path('storage/' . $path);
                 $destDir = dirname($destPath);
-                
-                // Ensure destination directory exists
                 if (!is_dir($destDir)) {
                     mkdir($destDir, 0755, true);
                 }
-                
-                if (copy($sourcePath, $destPath)) {
-                    \Log::info('Image uploaded and copied to public storage: ' . $path);
-                } else {
-                    \Log::error('Failed to copy image to public storage: ' . $path);
-                }
+                @copy($sourcePath, $destPath);
             } catch (\Exception $e) {
                 return redirect()->back()->withErrors(['image' => 'Failed to upload image: ' . $e->getMessage()]);
             }
         } else {
-            // Remove image field for non-hero sections
             unset($data['image']);
         }
 

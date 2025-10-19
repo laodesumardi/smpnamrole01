@@ -60,7 +60,7 @@
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Gambar Saat Ini</label>
                     <div class="flex items-center space-x-4">
-                        <img src="{{ asset($schoolProfile->image) }}" alt="{{ $schoolProfile->title }}" class="h-32 w-48 object-cover rounded-lg">
+                        <img src="{{ $schoolProfile->image_url }}" onerror="this.src='{{ asset('images/default-struktur.png') }}'" alt="{{ $schoolProfile->title }}" class="h-32 w-48 object-cover rounded-lg">
                         <div>
                             <p class="text-sm text-gray-600">{{ basename($schoolProfile->image) }}</p>
                             <p class="text-xs text-gray-500">Upload gambar baru untuk mengganti</p>

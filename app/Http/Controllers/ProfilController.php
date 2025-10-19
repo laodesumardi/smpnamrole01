@@ -96,6 +96,6 @@ class ProfilController extends Controller
             ]
         ];
 
-        return view('profil.index', compact('profilData'));
+        return view('profil.index', compact('profilData', 'sections'));
     }
 }
