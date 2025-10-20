@@ -530,7 +530,7 @@
                     <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-100">
                         <div class="flex items-center justify-between mb-4">
                             <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {{ $achievement->type == 'academic' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800' }}">
-                                {{ $achievement->getTypeLabel() }}
+                                {{ $achievement->type_label }}
                             </span>
                             <span class="text-sm text-gray-500">{{ $achievement->year }}</span>
                         </div>
