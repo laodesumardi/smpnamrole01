@@ -223,9 +223,9 @@
                 <div class="md:col-span-2">
                     <label for="photo" class="block text-sm font-medium text-gray-700 mb-2">Foto</label>
                     <div class="mb-2">
-                        <img id="photo-preview" src="{{ asset('images/default-teacher.png') }}" alt="Preview" 
-                             class="h-20 w-20 rounded-full object-cover border-2 border-gray-200 hidden">
-                        <p id="photo-preview-text" class="text-sm text-gray-500">Pilih foto untuk preview</p>
+                        <img id="photo-preview" src="{{ '/images/default-teacher.png' }}" alt="Preview" 
+                             class="h-20 w-20 rounded-full object-cover border-2 border-gray-200">
+                        <p id="photo-preview-text" class="text-sm text-gray-500 hidden">Pilih foto baru untuk preview</p>
                     </div>
                     <input type="file" name="photo" id="photo" accept="image/*" 
                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 @error('photo') border-red-500 @enderror"

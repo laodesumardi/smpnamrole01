@@ -67,6 +67,21 @@ class TeacherController extends Controller
             // Store file using Laravel Storage facade
             $path = $photo->storeAs('teachers', $filename, 'public');
             $data['photo'] = $path;
+
+            // Copy uploaded file to public/storage for immediate access (handles Windows symlink issues)
+            try {
+                $sourcePath = storage_path('app/public/' . $path);
+                $destPath = public_path('storage/' . $path);
+                $destDir = dirname($destPath);
+                if (!is_dir($destDir)) {
+                    @mkdir($destDir, 0755, true);
+                }
+                if (file_exists($sourcePath)) {
+                    @copy($sourcePath, $destPath);
+                }
+            } catch (\Throwable $e) {
+                // Silently ignore copy errors; accessor will fallback to default image
+            }
         } else {
             $data['photo'] = null;
         }
@@ -135,6 +150,11 @@ class TeacherController extends Controller
             // Delete old photo
             if ($teacher->photo && Storage::disk('public')->exists($teacher->photo)) {
                 Storage::disk('public')->delete($teacher->photo);
+                // Also delete copied file in public/storage if exists
+                $oldPublicPath = public_path('storage/' . $teacher->photo);
+                if (file_exists($oldPublicPath)) {
+                    @unlink($oldPublicPath);
+                }
             }
 
             $photo = $request->file('photo');
@@ -143,6 +163,21 @@ class TeacherController extends Controller
             // Store file using Laravel Storage facade
             $path = $photo->storeAs('teachers', $filename, 'public');
             $data['photo'] = $path;
+
+            // Copy uploaded file to public/storage for immediate access
+            try {
+                $sourcePath = storage_path('app/public/' . $path);
+                $destPath = public_path('storage/' . $path);
+                $destDir = dirname($destPath);
+                if (!is_dir($destDir)) {
+                    @mkdir($destDir, 0755, true);
+                }
+                if (file_exists($sourcePath)) {
+                    @copy($sourcePath, $destPath);
+                }
+            } catch (\Throwable $e) {
+                // Ignore copy errors
+            }
         } else {
             // Keep existing photo if no new photo uploaded
             unset($data['photo']);
@@ -192,7 +227,11 @@ class TeacherController extends Controller
 
         // Delete photo if exists
         if ($teacher->photo) {
-            Storage::delete('public/teachers/' . $teacher->photo);
+            Storage::disk('public')->delete($teacher->photo);
+            $publicPath = public_path('storage/' . $teacher->photo);
+            if (file_exists($publicPath)) {
+                @unlink($publicPath);
+            }
         }
 
         // Delete teacher
