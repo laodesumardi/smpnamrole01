@@ -289,6 +289,10 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('school-profile/struktur/edit', [SchoolProfileController::class, 'editStruktur'])->name('school-profile.edit-struktur');
     Route::put('school-profile/struktur/update', [SchoolProfileController::class, 'updateStruktur'])->name('school-profile.update-struktur');
     
+    // Vision & Mission routes
+    Route::get('vision-mission', [App\Http\Controllers\Admin\VisionMissionController::class, 'edit'])->name('vision-mission.edit');
+    Route::put('vision-mission', [App\Http\Controllers\Admin\VisionMissionController::class, 'update'])->name('vision-mission.update');
+    
     // Resource routes
     Route::resource('school-profile', SchoolProfileController::class);
     Route::resource('teachers', TeacherController::class);
@@ -337,8 +341,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         // Library Admin Routes
         Route::resource('libraries', App\Http\Controllers\Admin\LibraryController::class);
         
-        // Vision Mission Admin Routes
-        Route::resource('vision-missions', App\Http\Controllers\Admin\VisionMissionController::class);
+        // Vision Mission Admin Routes - handled by custom routes above
         
         // Message Admin Routes
         Route::resource('messages', App\Http\Controllers\Admin\MessageController::class)->only(['index', 'show', 'update', 'destroy']);

@@ -3,94 +3,72 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\VisionMission;
+use App\Models\SchoolProfile;
 use Illuminate\Http\Request;
 
 class VisionMissionController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display the vision and mission edit form
      */
     public function index()
     {
-        $visionMissions = VisionMission::orderBy('created_at', 'desc')->paginate(10);
-        return view('admin.vision-missions.index', compact('visionMissions'));
+        return $this->edit();
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display the vision and mission edit form
      */
-    public function create()
+    public function edit()
     {
-        return view('admin.vision-missions.create');
+        // Get the complete school profile (without section_key)
+        $profile = SchoolProfile::whereNull('section_key')->first();
+        
+        if (!$profile) {
+            // Create a new profile if it doesn't exist
+            $profile = SchoolProfile::create([
+                'school_name' => 'SMP Negeri 01 Namrole',
+                'vision' => 'Menjadi sekolah unggul yang menghasilkan lulusan berkarakter, berprestasi, dan berdaya saing global',
+                'mission' => 'Menyelenggarakan pendidikan berkualitas dengan nilai karakter\nMengembangkan potensi siswa melalui pembelajaran kreatif dan inovatif\nMembina hubungan harmonis antara sekolah, orang tua, dan masyarakat\nMenyediakan fasilitas pembelajaran yang memadai dan modern\nMembentuk siswa yang peduli sosial dan lingkungan',
+                'is_active' => true
+            ]);
+        }
+        
+        return view('admin.vision-mission.edit', compact('profile'));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Update the vision and mission
      */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'vision' => 'required|string',
-            'missions' => 'required|array|min:1',
-            'missions.*' => 'required|string|max:500',
-            'is_active' => 'boolean'
-        ]);
-
-        $data = $request->all();
-        $data['is_active'] = $request->has('is_active');
-
-        VisionMission::create($data);
-
-        return redirect()->route('admin.vision-missions.index')
-            ->with('success', 'Visi & Misi berhasil ditambahkan.');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(VisionMission $visionMission)
-    {
-        return view('admin.vision-missions.show', compact('visionMission'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(VisionMission $visionMission)
-    {
-        return view('admin.vision-missions.edit', compact('visionMission'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, VisionMission $visionMission)
+    public function update(Request $request)
     {
         $request->validate([
-            'vision' => 'required|string',
-            'missions' => 'required|array|min:1',
-            'missions.*' => 'required|string|max:500',
-            'is_active' => 'boolean'
+            'vision' => 'required|string|max:1000',
+            'mission' => 'required|string|max:2000',
+        ], [
+            'vision.required' => 'Visi harus diisi',
+            'vision.max' => 'Visi maksimal 1000 karakter',
+            'mission.required' => 'Misi harus diisi',
+            'mission.max' => 'Misi maksimal 2000 karakter',
         ]);
 
-        $data = $request->all();
-        $data['is_active'] = $request->has('is_active');
+        // Get the complete school profile
+        $profile = SchoolProfile::whereNull('section_key')->first();
+        
+        if (!$profile) {
+            return redirect()->back()->withErrors(['error' => 'Profil sekolah tidak ditemukan.']);
+        }
 
-        $visionMission->update($data);
+        // Clean up mission data by removing numbered prefixes
+        $cleanMission = preg_replace('/^\d+\.\s*/m', '', $request->mission);
+        
+        // Update vision and mission
+        $profile->update([
+            'vision' => $request->vision,
+            'mission' => $cleanMission,
+        ]);
 
-        return redirect()->route('admin.vision-missions.index')
-            ->with('success', 'Visi & Misi berhasil diperbarui.');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(VisionMission $visionMission)
-    {
-        $visionMission->delete();
-
-        return redirect()->route('admin.vision-missions.index')
-            ->with('success', 'Visi & Misi berhasil dihapus.');
+        return redirect()->route('admin.vision-mission.edit')
+            ->with('success', 'Visi & Misi berhasil diperbarui!');
     }
 }

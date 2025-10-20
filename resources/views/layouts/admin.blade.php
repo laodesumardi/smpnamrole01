@@ -242,7 +242,7 @@
 
                 <!-- Content Dropdown Menu -->
                 <div class="space-y-1">
-                    <button onclick="toggleContentDropdown()" class="w-full flex items-center justify-between px-4 py-2 rounded-lg hover:bg-primary-500 transition-colors {{ request()->routeIs('admin.news.*', 'admin.academic-calendar.*', 'admin.gallery.*', 'admin.documents.*', 'admin.teachers.*', 'admin.achievements.*', 'admin.subjects.*', 'admin.libraries.*', 'admin.vision-missions.*') ? 'bg-primary-500' : '' }}">
+                    <button onclick="toggleContentDropdown()" class="w-full flex items-center justify-between px-4 py-2 rounded-lg hover:bg-primary-500 transition-colors {{ request()->routeIs('admin.news.*', 'admin.academic-calendar.*', 'admin.gallery.*', 'admin.documents.*', 'admin.teachers.*', 'admin.achievements.*', 'admin.subjects.*', 'admin.libraries.*', 'admin.vision-mission.*') ? 'bg-primary-500' : '' }}">
                         <div class="flex items-center">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
@@ -333,7 +333,7 @@
                             <span class="text-sm">Perpustakaan</span>
                         </a>
                         
-                        <a href="{{ route('admin.vision-missions.index') }}" class="flex items-center px-4 py-2 rounded-lg hover:bg-primary-500 transition-colors {{ request()->routeIs('admin.vision-missions.*') ? 'bg-primary-500' : '' }}">
+                        <a href="{{ route('admin.vision-mission.edit') }}" class="flex items-center px-4 py-2 rounded-lg hover:bg-primary-500 transition-colors {{ request()->routeIs('admin.vision-mission.*') ? 'bg-primary-500' : '' }}">
                             <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
