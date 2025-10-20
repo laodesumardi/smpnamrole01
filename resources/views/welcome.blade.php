@@ -512,6 +512,90 @@
     </div>
     @endif
 
+    <!-- Achievements Section -->
+    @if($featuredAchievements->count() > 0 || $latestAchievements->count() > 0)
+    <div class="bg-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Prestasi Siswa</h2>
+                <p class="text-lg text-gray-600">Pencapaian membanggakan dari siswa-siswi SMP Negeri 01 Namrole</p>
+            </div>
+
+            <!-- Featured Achievements -->
+            @if($featuredAchievements->count() > 0)
+            <div class="mb-12">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6">Prestasi Unggulan</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    @foreach($featuredAchievements as $achievement)
+                    <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-100">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {{ $achievement->type == 'academic' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800' }}">
+                                {{ $achievement->getTypeLabel() }}
+                            </span>
+                            <span class="text-sm text-gray-500">{{ $achievement->year }}</span>
+                        </div>
+                        
+                        <h4 class="text-lg font-semibold text-gray-900 mb-2">{{ $achievement->title }}</h4>
+                        
+                        @if($achievement->position)
+                        <div class="flex items-center mb-3">
+                            <svg class="w-5 h-5 text-yellow-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <span class="text-sm font-medium text-gray-700">{{ $achievement->position }}</span>
+                        </div>
+                        @endif
+                        
+                        @if($achievement->participant_name)
+                        <p class="text-sm text-gray-600 mb-2">
+                            <span class="font-medium">Peserta:</span> {{ $achievement->participant_name }}
+                        </p>
+                        @endif
+                        
+                        @if($achievement->level_label)
+                        <p class="text-sm text-gray-600">
+                            <span class="font-medium">Tingkat:</span> {{ $achievement->level_label }}
+                        </p>
+                        @endif
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+
+            <!-- Latest Achievements -->
+            @if($latestAchievements->count() > 0)
+            <div class="mb-8">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6">Prestasi Terbaru</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    @foreach($latestAchievements->take(6) as $achievement)
+                    <div class="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-colors duration-200">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm font-medium text-gray-700">{{ $achievement->title }}</span>
+                            <span class="text-xs text-gray-500">{{ $achievement->year }}</span>
+                        </div>
+                        @if($achievement->position)
+                        <p class="text-sm text-gray-600">{{ $achievement->position }}</p>
+                        @endif
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+
+            <!-- View All Achievements Button -->
+            <div class="text-center">
+                <a href="{{ route('achievements.index') }}" class="inline-flex items-center px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-semibold">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                    </svg>
+                    Lihat Semua Prestasi
+                </a>
+            </div>
+        </div>
+    </div>
+    @endif
+
     <!-- Contact Form Section -->
     <div class="py-16 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

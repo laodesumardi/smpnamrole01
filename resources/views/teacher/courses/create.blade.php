@@ -49,11 +49,15 @@
                     <select name="subject" id="subject" 
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 @error('subject') border-red-500 @enderror">
                         <option value="">Pilih Mata Pelajaran</option>
-                        @foreach($subjects as $subject)
-                            <option value="{{ $subject->name }}" {{ old('subject') == $subject->name ? 'selected' : '' }}>
-                                {{ $subject->name }}
-                            </option>
-                        @endforeach
+                        @if(isset($subjects) && $subjects->count() > 0)
+                            @foreach($subjects as $subject)
+                                <option value="{{ $subject->name }}" {{ old('subject') == $subject->name ? 'selected' : '' }}>
+                                    {{ $subject->name }}
+                                </option>
+                            @endforeach
+                        @else
+                            <option value="" disabled>Tidak ada mata pelajaran tersedia</option>
+                        @endif
                     </select>
                     @error('subject')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>

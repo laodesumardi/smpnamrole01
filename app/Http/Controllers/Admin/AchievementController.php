@@ -42,11 +42,31 @@ class AchievementController extends Controller
             'position' => 'nullable|string|max:100',
             'participant_name' => 'nullable|string|max:255',
             'notes' => 'nullable|string',
-            'is_active' => 'boolean'
+            'is_active' => 'boolean',
+            'is_featured' => 'boolean',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'certificate_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
         $data = $request->all();
         $data['is_active'] = $request->has('is_active');
+        $data['is_featured'] = $request->has('is_featured');
+
+        // Handle photo upload
+        if ($request->hasFile('photo')) {
+            $photo = $request->file('photo');
+            $photoName = time() . '_photo_' . $photo->getClientOriginalName();
+            $photoPath = $photo->storeAs('uploads/achievements', $photoName, 'public');
+            $data['photo'] = $photoPath;
+        }
+
+        // Handle certificate image upload
+        if ($request->hasFile('certificate_image')) {
+            $certificate = $request->file('certificate_image');
+            $certificateName = time() . '_certificate_' . $certificate->getClientOriginalName();
+            $certificatePath = $certificate->storeAs('uploads/achievements', $certificateName, 'public');
+            $data['certificate_image'] = $certificatePath;
+        }
 
         Achievement::create($data);
 
@@ -84,11 +104,41 @@ class AchievementController extends Controller
             'position' => 'nullable|string|max:100',
             'participant_name' => 'nullable|string|max:255',
             'notes' => 'nullable|string',
-            'is_active' => 'boolean'
+            'is_active' => 'boolean',
+            'is_featured' => 'boolean',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'certificate_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
         $data = $request->all();
         $data['is_active'] = $request->has('is_active');
+        $data['is_featured'] = $request->has('is_featured');
+
+        // Handle photo upload
+        if ($request->hasFile('photo')) {
+            // Delete old photo if exists
+            if ($achievement->photo && Storage::disk('public')->exists($achievement->photo)) {
+                Storage::disk('public')->delete($achievement->photo);
+            }
+            
+            $photo = $request->file('photo');
+            $photoName = time() . '_photo_' . $photo->getClientOriginalName();
+            $photoPath = $photo->storeAs('uploads/achievements', $photoName, 'public');
+            $data['photo'] = $photoPath;
+        }
+
+        // Handle certificate image upload
+        if ($request->hasFile('certificate_image')) {
+            // Delete old certificate if exists
+            if ($achievement->certificate_image && Storage::disk('public')->exists($achievement->certificate_image)) {
+                Storage::disk('public')->delete($achievement->certificate_image);
+            }
+            
+            $certificate = $request->file('certificate_image');
+            $certificateName = time() . '_certificate_' . $certificate->getClientOriginalName();
+            $certificatePath = $certificate->storeAs('uploads/achievements', $certificateName, 'public');
+            $data['certificate_image'] = $certificatePath;
+        }
 
         $achievement->update($data);
 

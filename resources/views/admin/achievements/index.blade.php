@@ -244,6 +244,7 @@
                         <thead class="bg-gray-50">
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gambar</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Judul</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipe</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Level</th>
@@ -257,6 +258,33 @@
                             @foreach($achievements as $achievement)
                             <tr class="hover:bg-gray-50">
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $loop->iteration }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    @if($achievement->photo || $achievement->certificate_image)
+                                        <div class="flex items-center">
+                                            @if($achievement->photo)
+                                                <img src="{{ Storage::url($achievement->photo) }}" alt="{{ $achievement->title }}" class="w-12 h-12 object-cover rounded-lg border border-gray-200" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                                <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center" style="display: none;">
+                                                    <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                                    </svg>
+                                                </div>
+                                            @elseif($achievement->certificate_image)
+                                                <img src="{{ Storage::url($achievement->certificate_image) }}" alt="{{ $achievement->title }}" class="w-12 h-12 object-cover rounded-lg border border-gray-200" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                                <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center" style="display: none;">
+                                                    <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                                    </svg>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    @else
+                                        <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                                            <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                            </svg>
+                                        </div>
+                                    @endif
+                                </td>
                                 <td class="px-6 py-4">
                                     <div class="text-sm font-medium text-gray-900">{{ $achievement->title }}</div>
                                     @if($achievement->participant_name)

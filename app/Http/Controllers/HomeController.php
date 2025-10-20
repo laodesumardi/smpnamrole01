@@ -7,6 +7,7 @@ use App\Models\HomeSection;
 use App\Models\News;
 use App\Models\HeadmasterGreeting;
 use App\Models\Gallery;
+use App\Models\Achievement;
 
 class HomeController extends Controller
 {
@@ -54,6 +55,21 @@ class HomeController extends Controller
             ->limit(6)
             ->get();
 
-        return view('welcome', compact('sections', 'latestNews', 'featuredNews', 'pinnedNews', 'headmasterGreeting', 'featuredGalleries', 'latestGalleries'));
+        // Get featured achievements for homepage
+        $featuredAchievements = Achievement::active()
+            ->featured()
+            ->orderBy('year', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->limit(6)
+            ->get();
+
+        // Get latest achievements for homepage
+        $latestAchievements = Achievement::active()
+            ->orderBy('year', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->limit(6)
+            ->get();
+
+        return view('welcome', compact('sections', 'latestNews', 'featuredNews', 'pinnedNews', 'headmasterGreeting', 'featuredGalleries', 'latestGalleries', 'featuredAchievements', 'latestAchievements'));
     }
 }

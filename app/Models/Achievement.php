@@ -15,11 +15,15 @@ class Achievement extends Model
         'position',
         'participant_name',
         'notes',
-        'is_active'
+        'is_active',
+        'is_featured',
+        'certificate_image',
+        'photo'
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
+        'is_featured' => 'boolean',
         'year' => 'integer'
     ];
 
@@ -42,6 +46,16 @@ class Achievement extends Model
     public function scopeByYear($query, $year)
     {
         return $query->where('year', $year);
+    }
+
+    public function scopeFeatured($query)
+    {
+        return $query->where('is_featured', true);
+    }
+
+    public function scopePublished($query)
+    {
+        return $query->where('is_active', true);
     }
 
     // Accessors

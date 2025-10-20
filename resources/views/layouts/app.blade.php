@@ -240,6 +240,8 @@
                         </div>
                     </div>
 
+                    <a href="{{ route('achievements.index') }}" class="text-white hover:text-primary-200 px-3 py-2 text-base font-bold transition-colors {{ request()->routeIs('achievements.*') ? 'text-primary-200' : '' }}">Prestasi</a>
+                    
                     <!-- Media Dropdown -->
                     <div class="relative group">
                         <button class="text-white hover:text-primary-200 px-3 py-2 text-base font-bold transition-colors flex items-center {{ request()->routeIs('gallery.*', 'documents.*', 'library', 'staff') ? 'text-primary-200' : '' }}">
@@ -371,6 +373,10 @@
                                 </a>
                             </div>
                         </div>
+                        
+                        <a href="{{ route('achievements.index') }}" class="text-white hover:text-primary-200 hover:bg-primary-700 block px-4 py-3 rounded-lg text-base font-medium transition-colors {{ request()->routeIs('achievements.*') ? 'bg-primary-700' : '' }}">
+                            <i class="fas fa-trophy mr-3"></i>Prestasi
+                        </a>
                         
                         <!-- Media Section -->
                         <div class="space-y-1">

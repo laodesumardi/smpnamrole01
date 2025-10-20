@@ -29,7 +29,7 @@
                 <h3 class="text-lg font-semibold text-gray-900">Form Tambah Prestasi</h3>
             </div>
             <div class="p-6">
-                <form action="{{ route('admin.achievements.store') }}" method="POST" class="space-y-6">
+                <form action="{{ route('admin.achievements.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                     @csrf
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
@@ -114,9 +114,35 @@
                         @enderror
                     </div>
 
-                    <div class="flex items-center">
-                        <input type="checkbox" name="is_active" id="is_active" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded" value="1" {{ old('is_active', true) ? 'checked' : '' }}>
-                        <label for="is_active" class="ml-2 block text-sm text-gray-900">Aktif</label>
+                    <!-- Image Upload Section -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="photo" class="block text-sm font-medium text-gray-700 mb-2">Foto Prestasi</label>
+                            <input type="file" name="photo" id="photo" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 @error('photo') border-red-500 @enderror" accept="image/*">
+                            @error('photo')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                            <p class="mt-1 text-sm text-gray-500">Format: JPG, PNG, GIF. Maksimal 2MB</p>
+                        </div>
+                        <div>
+                            <label for="certificate_image" class="block text-sm font-medium text-gray-700 mb-2">Foto Sertifikat</label>
+                            <input type="file" name="certificate_image" id="certificate_image" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 @error('certificate_image') border-red-500 @enderror" accept="image/*">
+                            @error('certificate_image')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                            <p class="mt-1 text-sm text-gray-500">Format: JPG, PNG, GIF. Maksimal 2MB</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-6">
+                        <div class="flex items-center">
+                            <input type="checkbox" name="is_active" id="is_active" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded" value="1" {{ old('is_active', true) ? 'checked' : '' }}>
+                            <label for="is_active" class="ml-2 block text-sm text-gray-900">Aktif</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" name="is_featured" id="is_featured" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded" value="1" {{ old('is_featured') ? 'checked' : '' }}>
+                            <label for="is_featured" class="ml-2 block text-sm text-gray-900">Featured (Tampilkan di halaman utama)</label>
+                        </div>
                     </div>
 
                     <div class="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200">

@@ -47,6 +47,10 @@ class CourseController extends Controller
     public function create()
     {
         $subjects = Subject::where('is_active', true)->get();
+        
+        // Debug: Log subjects count
+        \Log::info('Subjects count in create: ' . $subjects->count());
+        
         return view('teacher.courses.create', compact('subjects'));
     }
 
